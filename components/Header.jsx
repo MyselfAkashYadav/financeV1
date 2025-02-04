@@ -11,6 +11,8 @@ const Header = () => {
     return (
         <div className='fixed top-0 w-full bg-white/80 backdrop-blur-md z-50 border-b'>
 
+            {/* nav bar start */}
+
             <nav className="container mx-auto px-4 py-4 flex items-center justify-between ">
                 <Link href="/">
                 <Image src="/logo.png" alt="logo" width={200} height={60}
@@ -21,6 +23,9 @@ const Header = () => {
           
 
            <div className='flex items-center space-x-4'>
+
+            {/* buttons right side start */}
+
             <SignedIn>
                 <Link href={"/dashboard"}
                 className="text-gray-600 hover:text-blue-600 flex items-center gap-2"
@@ -49,7 +54,7 @@ const Header = () => {
 
             </SignedIn>
 
-
+            {/* signed out start */}
            <SignedOut>
                 <SignInButton forceRedirectUrl='/dashboard'>
 
@@ -71,6 +76,8 @@ const Header = () => {
            </div>
             
             </nav>
+
+            {/* nav bar end */}
         </div>
     )
 }
