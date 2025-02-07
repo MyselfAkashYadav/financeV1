@@ -2,8 +2,17 @@ import React from 'react'
 import CreateAccountDrawer from '@/components/create-account-drawer';
 import { Card, CardContent } from '@/components/ui/card';
 import { Plus } from 'lucide-react';
+// import { accountSchema } from '@/app/lib/schema';
+import { getUserAccounts } from '@/actions/dashboard';
+import AccountCard from './_components/account-card';
 
-const page = () => {
+
+
+const page =  async() => {
+  const accounts =await getUserAccounts();
+  // console.log(accounts)
+
+
   return (
     <div className='px-5'>
 
@@ -23,6 +32,13 @@ const page = () => {
           </Card>
 
         </CreateAccountDrawer>
+
+      {accounts.length >0 && accounts?.map((account)=>{
+        return <AccountCard key={account.id} account={account}/>
+
+      }
+      )}
+
       </div>
       
         

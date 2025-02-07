@@ -9,14 +9,14 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
   directUrl = env("DIRECT_URL")
 }
 
 model User {
   id            String    @id @default(uuid())
-  clerkUserId   String    @unique 
+  clerkUserId   String    @unique // clerk user id
   email         String    @unique
   name          String?
   imageUrl      String?
@@ -28,7 +28,8 @@ model User {
 
   @@map("users")
 }
-model Account{
+
+model Account {
   id           String        @id @default(uuid())
   name         String
   type         AccountType
@@ -44,7 +45,7 @@ model Account{
   @@map("accounts")
 }
 
-model Transaction{
+model Transaction {
   id                String            @id @default(uuid())
   type             TransactionType
   amount           Decimal
@@ -69,8 +70,9 @@ model Transaction{
   @@map("transactions")
 }
 
-model Budget{
-   id          String       @id @default(uuid())
+
+model Budget {
+  id          String       @id @default(uuid())
   amount      Decimal
   lastAlertSent DateTime?  // Track when the last alert was sent
   userId      String       @unique
@@ -82,15 +84,16 @@ model Budget{
   @@map("budgets")
 }
 
+enum TransactionType {
+  INCOME
+  EXPENSE
+}
+
 enum AccountType {
   CURRENT
   SAVINGS
 }
 
-enum TransactionType {
-  INCOME
-  EXPENSE
-}
 enum TransactionStatus {
   PENDING
   COMPLETED
