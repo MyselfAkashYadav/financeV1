@@ -1,11 +1,12 @@
 "use client";
 
 import { Switch } from '@/components/ui/switch'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '@/components/ui/card'
 import { ArrowUpRight, ArrowDownRight } from 'lucide-react'
 import Link from 'next/link'
 import useFetch from '@/hooks/useFetch'
+import { toast } from 'sonner'
 import { updateDefaultAccount } from '@/actions/accounts'
 
 
@@ -18,7 +19,7 @@ const AccountCard = ({account}) => {
     const{
       loading:updateDefaultLoading,
       fn:updateDefaultFn,
-      data:updateAccount,
+      data:updatedAccount,
       error,
     }=useFetch(updateDefaultAccount);
 
@@ -29,10 +30,24 @@ const AccountCard = ({account}) => {
         return; //not allowing toggle off default account
 
       }
+      await updateDefaultFn(id);
 
 
 
-    }
+    };
+
+    useEffect(()=>{
+      if(updatedAccount){
+        toast.success('Default account updated successfully');
+      }
+     
+    },[updatedAccount,updateDefaultLoading]);
+    useEffect(()=>{
+      if(error){
+        toast.error(error.message || 'Failed to update default account');
+      }
+     
+    },[error]);
 
 
 
@@ -42,7 +57,7 @@ const AccountCard = ({account}) => {
        <Link href={`/account/${id}`}>
     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2" >
       <CardTitle className="text-sm font-medium capitalize">
-        Card Title
+        {name}
       </CardTitle>
       <Switch
       checked={isDefault}
