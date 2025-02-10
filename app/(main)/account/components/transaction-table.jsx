@@ -1,6 +1,7 @@
 "use client";
 
-import React,{useState , useMemo } from 'react';
+import React,{useState , useMemo ,useEffect } from 'react';
+import useFetch from '@/hooks/useFetch';
 
 import{Table,TableHeader,TableRow,TableHead,TableBody,TableCell} from '@/components/ui/table'
 import { Checkbox } from '@/components/ui/checkbox'
@@ -16,7 +17,9 @@ import { useRouter } from 'next/navigation';
 import { Input } from '@/components/ui/input';
 import { Search } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-
+import { bulkDeleteTransactions } from '@/actions/accounts';
+import { BarLoader } from 'react-spinners';
+import { toast } from 'sonner';
 
 
 
@@ -45,6 +48,9 @@ const TransactionTable = ({transactions}) => {
   const [searchTerm,setSearchTerm]=useState("");
   const [typeFilter,setTypeFilter]=useState("");
   const [recurringFilter,setRecurringFilter]=useState("");
+
+
+
 
 
 
@@ -122,9 +128,32 @@ setSelectedIds(current=>current.includes(id)?current.filter(item=>item!=id):[...
 
   };
 
-  const handleBulkDelete=()=>{
+  const {
+    loading:deleteLoading,
+    fn:deleteFn,
+    data:deleted,
+  }=useFetch(bulkDeleteTransactions);
 
-  }
+  const handleBulkDelete=async()=>{
+    if(!window.confirm(
+      `Are you sure you want to delete ${selectedIds.length} transactions?`
+    )){
+      return;
+    }
+    
+    deleteFn(selectedIds);
+    
+    };
+    
+    useEffect(()=>{
+      if(deleted && deleteLoading){
+        toast.error("Transactions deleted successfully");
+    
+      }
+    },[deleted,deleteLoading]
+    )
+
+  
 
   const handleClearFilters=()=>{
     setSearchTerm("");
@@ -137,6 +166,7 @@ setSelectedIds(current=>current.includes(id)?current.filter(item=>item!=id):[...
   return (
     
     <div className='space-y-4 '>
+          {deleteLoading && <BarLoader className='mt-4' width={"100%"} color="#9333ea"/>}
 
       <div className='flex flex-col sm:flex-row gap-4'>
         <div className='relative flex-1'>
@@ -342,17 +372,17 @@ sortConfig.direction=="asc"? <ChevronUp className='ml-1 h-4 w-4'/>:<ChevronDown 
     </Button>
   </DropdownMenuTrigger>
   <DropdownMenuContent>
-    <DropdownMenuLabel
+    <DropdownMenuItem
     onClick={
       ()=>router.push(`/transaction/create?edit=${transaction.id}`)
     }
-    >Edit</DropdownMenuLabel>
+    >Edit</DropdownMenuItem>
     <DropdownMenuSeparator />
     
     <DropdownMenuItem className="text-destructive"
-    // onClick={
-    //   ()=>DEV_CLIENT_PAGES_MANIFEST([transaction])
-    // }
+    onClick={
+      ()=>deleteFn([transaction.id])
+    }
     >Delete</DropdownMenuItem>
   </DropdownMenuContent>
 </DropdownMenu>
