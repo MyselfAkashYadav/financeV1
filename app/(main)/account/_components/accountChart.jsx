@@ -9,7 +9,7 @@ import { format } from 'date-fns';
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '@/components/ui/card'
 
 import { Select, SelectContent, SelectTrigger, SelectValue,SelectItem } from '@/components/ui/select';
-import { $Enums } from '@prisma/client';
+import { Rectangle } from 'recharts';
 
 
 
@@ -122,27 +122,36 @@ const totals=useMemo(()=>{
                 
         </div>
     </div>
-    {/* <ResponsiveContainer width="100%" height="100%">
+    <div className="h-[300px]">
+       <ResponsiveContainer width="100%" height="100%">
         <BarChart
           width={500}
           height={300}
-          data={data}
+          data={filteredData}
           margin={{
-            top: 5,
-            right: 30,
-            left: 20,
-            bottom: 5,
+            top: 10,
+            right: 10,
+            left: 10,
+            bottom: 0,
           }}
         >
           <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="name" />
-          <YAxis />
-          <Tooltip />
+          <XAxis dataKey="date" />
+          <YAxis
+          fontSize={12}
+          tickLine={false}
+          axisLine={false}
+          tickFormatter={(value)=>`$${value}`} />
+          <Tooltip formatter={(value)=>[`$${value}`,undefined]} />
           <Legend />
-          <Bar dataKey="pv" fill="#8884d8" activeBar={<Rectangle fill="pink" stroke="blue" />} />
-          <Bar dataKey="uv" fill="#82ca9d" activeBar={<Rectangle fill="gold" stroke="purple" />} />
+          <Bar dataKey="income" name="Income" fill="#22c55e" radius={[4,4,0,0]} />
+          <Bar dataKey="expense" name="Expense" fill="#ef4444" radius={[4,4,0,0]} />
         </BarChart>
-      </ResponsiveContainer> */}
+      </ResponsiveContainer>
+
+
+    </div>
+   
    
 
   </CardContent>
