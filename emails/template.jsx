@@ -3,16 +3,10 @@ import * as React from "react";
 
 
 
-export default function Email({
-    userName="Akash",
+export default function EmailTemplate({
+    userName="",
     type="budget-alert",
-    data={
-        // dummy data
-        percentageUsed: 85,
-      budgetAmount: 4000,
-      totalExpenses: 3400,
-
-    },
+    data={ },
 
 })
 
