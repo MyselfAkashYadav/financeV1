@@ -34,6 +34,8 @@ export default function BudgetProgress({ initialBudget, currentExpenses }) {
     ? (currentExpenses / initialBudget.amount) * 100
     : 0;
 
+    console.log(currentExpenses);
+
   const handleUpdateBudget = async () => {
     const amount = parseFloat(newBudget);
 

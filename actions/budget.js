@@ -41,6 +41,7 @@ const endOfMonth=new Date(
 const expenses=await db.transaction.aggregate({
 where:{
     userId:user.id,
+    type:"EXPENSE",
     date:{
         gte:startOfMonth,
         lte:endOfMonth,
