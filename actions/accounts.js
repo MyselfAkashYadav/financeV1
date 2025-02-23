@@ -124,7 +124,7 @@ export async function bulkDeleteTransactions(transactionIds){
     const accountBalanceChanges=transactions.reduce((acc,transaction)=>{
       const change=transaction.type==="EXPENSE"?transaction.amount:-transaction.amount;
 
-      acc[transaction.accountId]=(acc[transaction.accountId]||0)+change;
+      acc[transaction.accountId]=(acc[transaction.accountId] || 0)+change;
       return acc;
     },{});
 
