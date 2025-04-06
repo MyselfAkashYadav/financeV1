@@ -58,6 +58,21 @@ export function AddTransactionForm({
   } = useForm({
     resolver: zodResolver(transactionSchema),
     defaultValues:
+
+    editMode && initialData?{
+      type: initialData.type,
+      amount: initialData.amount.toString(),
+      description: initialData.description,
+      accountId: initialData.accountId,
+      category: initialData.category,
+      date: new Date(initialData.date),
+      isRecurring: initialData.isRecurring,
+      ...(initialData.recurringInterval && {
+        recurringInterval: initialData.recurringInterval,
+      }),
+
+
+    }:
       {
             type: "EXPENSE",
             amount: "",
@@ -72,7 +87,7 @@ export function AddTransactionForm({
     loading: transactionLoading,
     fn: transactionFn,
     data: transactionResult,
-  } = useFetch(createTransaction);
+  } = useFetch( editMode? updateTransaction: createTransaction);
 
   const onSubmit = async(data) => {
     const formData = {
@@ -80,11 +95,11 @@ export function AddTransactionForm({
       amount: parseFloat(data.amount),
     };
 
-    // if (editMode) {
-    //   transactionFn(editId, formData);
-    // } else {
+    if (editMode) {
+      transactionFn(editId, formData);
+    } else {
       transactionFn(formData);
-    // }
+    }
   };
 
   const handleScanComplete = (scannedData) => {
@@ -104,10 +119,10 @@ export function AddTransactionForm({
 
   useEffect(() => {
     if (transactionResult?.success && !transactionLoading) {
-      toast.success("transaction created successfully"
-        // editMode
-        //   ? "Transaction updated successfully"
-        //   : "Transaction created successfully"
+      toast.success(
+        editMode
+          ? "Transaction updated successfully"
+          : "Transaction created successfully"
       );
       reset();
       router.push(`/account/${transactionResult.data.accountId}`);
@@ -125,8 +140,8 @@ export function AddTransactionForm({
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
       {/* Receipt Scanner - Only show in create mode */}
-      <ReceiptScanner onScanComplete={handleScanComplete} />
-      {/* {!editMode && <ReceiptScanner onScanComplete={handleScanComplete} />} */}
+  
+      {!editMode && <ReceiptScanner onScanComplete={handleScanComplete} />}
 
       {/* Type */}
       <div className="space-y-2">
@@ -310,7 +325,7 @@ export function AddTransactionForm({
           Cancel
         </Button>
         <Button type="submit" className="w-full" disabled={transactionLoading}>
-          {/* {transactionLoading ? (
+          {transactionLoading ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
               {editMode ? "Updating..." : "Creating..."}
@@ -319,7 +334,7 @@ export function AddTransactionForm({
             "Update Transaction"
           ) : (
             "Create Transaction"
-          )} */}
+          )}
           Create Transaction
         </Button>
       </div>
