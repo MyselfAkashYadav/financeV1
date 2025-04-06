@@ -5,8 +5,10 @@ import * as React from "react";
 
 export default function EmailTemplate({
     userName="",
-    type="budget-alert",
-    data={ },
+    type="monthly-report",
+    data={
+      
+     },
 
 })
 
