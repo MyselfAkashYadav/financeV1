@@ -1,6 +1,10 @@
 
 import { clerkMiddleware,createRouteMatcher } from "@clerk/nextjs/server";
 import { detectBot } from "arcjet";
+import { shield } from "arcjet";
+import arcjet from "@arcjet/next";
+
+
 
 
 
